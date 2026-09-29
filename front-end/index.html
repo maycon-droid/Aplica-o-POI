@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="map"></div>
+    <div id="buscar">
+        <input type="text" id="buscar-inp" placeholder="insira o local a ser buscado"><button id="btnBuscar">Buscar</button>
+    </div>
+    <div id="form">
+        <input type="text" id="campoNome" placeholder="Informe o nome">
+        <input type="text" id="campoDescricao" placeholder="Informe a descrição">
+        <select id="campoTipo">
+            <option value="educação">Educação</option>
+            <option value="lazer">Lazer</option>
+            <option value="Saúde">Saúde</option>
+            <option value="Trabalho">Trabalho</option>
+        </select>
+        <button id="buttonSalvar">Salvar</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
