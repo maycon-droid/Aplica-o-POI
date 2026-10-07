@@ -55,19 +55,30 @@ async function carregarPontos(){
 }
 
 const botaoSalvar = document.getElementById('btnSalvar');
-    botaoSalvar.addEventListener('click', async ()=>{
-        let nome = document.getElementById('campoNome').value;
-        let descricao = document.getElementById('campoDescricao').value;
-        let tipo = document.getElementById('campoTipo').value;
-        let localizacao = {
-            type: 'Point',
-            coordinates: [marker.getLatLng().lat, marker.getLatLng().lng]
-        }
-        const ponto = {
-            nome,
-            descricao,
-            tipo,
-            localizacao
-        }
-        console.log(JSON.stringify(ponto));
+botaoSalvar.addEventListener('click', async ()=>{
+    let nome = document.getElementById('campoNome').value;
+    let descricao = document.getElementById('campoDescricao').value;
+    let tipo = document.getElementById('campoTipo').value;
+    let localizacao = {
+        type: 'Point',
+        coordinates: [marker.getLatLng().lat, marker.getLatLng().lng]
+    }
+    const ponto = {
+        nome,
+        descricao,
+        tipo,
+        localizacao
+    }
+    fetch('https://aplicacao-poi.onrender.com/pois', {
+            method : 'POST',
+            body: JSON.stringify(ponto),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if(response.status === 201){
+                alert('Salvo com sucesso');
+                window.location.reload();
+            }
+        });
 });
