@@ -43,7 +43,7 @@ botaoBuscar.addEventListener('click', async ()=>{
 carregarPontos();
 
 async function carregarPontos(){
-    fetch('https://aplicacao-poi.onrender.com/pois')
+    fetch('http://localhost:3000/pois')
     .then(response => response.json())
     .then(data =>{
         data.forEach(ponto =>{
@@ -69,7 +69,7 @@ botaoSalvar.addEventListener('click', async ()=>{
         tipo,
         localizacao
     }
-    fetch('https://aplicacao-poi.onrender.com/pois', {
+    fetch('http://localhost:3000/pois', {
             method : 'POST',
             body: JSON.stringify(ponto),
             headers: {
