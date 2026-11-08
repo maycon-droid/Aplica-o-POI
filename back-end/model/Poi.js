@@ -1,9 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../database/sequelize.js";
 
-
 const Poi = sequelize.define(
-  'Poi',
+  "Poi",
   {
     // Model attributes are defined here
     nome: {
@@ -18,25 +17,40 @@ const Poi = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['Buraco na via', 'Iluminação pública', 'Acúmulo de lixo', 'Alagamento', 'Esgoto a céu aberto', 'Outros']]
-      }
+        isIn: [
+          [
+            "Buraco na via",
+            "Iluminação pública",
+            "Acúmulo de lixo",
+            "Alagamento",
+            "Esgoto a céu aberto",
+            "Outros",
+          ],
+        ],
+      },
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "Pendente",
+      validate: {
+        isIn: [["Pendente", "Em andamento", "Resolvido"]],
+      },
     },
     localizacao: {
-      type: DataTypes.GEOMETRY('POINT'),
-      allowNull: false
+      type: DataTypes.GEOMETRY("POINT"),
+      allowNull: false,
     },
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true
-    }
+      primaryKey: true,
+    },
   },
   {
     // Other model options go here
   },
 );
 
-
-Poi.sync();
 
 export default Poi;
