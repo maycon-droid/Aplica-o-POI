@@ -16,7 +16,10 @@ const Poi = sequelize.define(
     },
     tipo: {
       type: DataTypes.STRING,
-      enum: ['Educação' , 'Lazer', 'Saúde', 'Trabalho']
+      allowNull: false,
+      validate: {
+        isIn: [['Buraco na via', 'Iluminação pública', 'Acúmulo de lixo', 'Alagamento', 'Esgoto a céu aberto', 'Outros']]
+      }
     },
     localizacao: {
       type: DataTypes.GEOMETRY('POINT'),
