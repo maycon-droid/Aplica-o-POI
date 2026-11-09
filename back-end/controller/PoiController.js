@@ -1,5 +1,5 @@
 import Poi from "../model/Poi.js";
-import { Op, fn, col, where } from "sequelize";
+import { Op, fn, col, where, cast } from "sequelize";
 
 export async function getPois(req, res) {
   try {
@@ -105,5 +105,62 @@ export async function deletePoi(req, res) {
   } catch (error) {
     console.error(error);
     res.status(400).json({ erro: "Erro ao excluir ocorrência" });
+  }
+}
+
+export async function getPoisProximos(req, res) {
+  try {
+    const { lat, lng, raio } = req.query;
+
+    if ([lat, lng, raio].some((valor) => valor === undefined || valor === "")) {
+      return res.status(400).json({
+        erro: "Informe latitude, longitude e raio",
+      });
+    }
+
+    const latitude = Number(lat);
+    const longitude = Number(lng);
+    const distancia = Number(raio);
+
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      !Number.isFinite(distancia) ||
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180 ||
+      distancia <= 0 ||
+      distancia > 50000
+    ) {
+      return res.status(400).json({
+        erro: "Parâmetros geográficos inválidos",
+      });
+    }
+
+    const pontoUsuario = fn(
+      "ST_SetSRID",
+      fn("ST_MakePoint", longitude, latitude),
+      4326,
+    );
+
+    const ocorrencias = await Poi.findAll({
+      where: where(
+        fn(
+          "ST_DWithin",
+          cast(col("localizacao"), "geography"),
+          cast(pontoUsuario, "geography"),
+          distancia,
+        ),
+        true,
+      ),
+    });
+
+    res.json(ocorrencias);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      erro: "Erro ao buscar ocorrências próximas",
+    });
   }
 }
