@@ -1,57 +1,113 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GeoAlerta — Problemas urbanos</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
       crossorigin=""
     />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>GeoAlerta</h1>
+      <p>Registre e visualize problemas urbanos no mapa.</p>
+    </header>
+
+    <main>
+      <section id="buscar">
+        <h2>Buscar localidade</h2>
+
+        <input
+          type="text"
+          id="buscar-inp"
+          placeholder="Digite uma cidade, rua ou endereço"
+          aria-label="Localidade"
+        />
+
+        <button id="btnBuscar" type="button">Buscar</button>
+      </section>
+
+      <section aria-label="Mapa de ocorrências">
+        <h2>Mapa de ocorrências</h2>
+
+        <div id="map"></div>
+
+        <p>
+          Clique no mapa para selecionar a localização de uma ocorrência ou
+          arraste o marcador.
+        </p>
+      </section>
+
+      <section class="busca-proximidade">
+        <h2>Ocorrências próximas de mim</h2>
+
+        <label for="raioBusca"> Distância máxima </label>
+
+        <select id="raioBusca">
+          <option value="500">500 metros</option>
+          <option value="1000">1 km</option>
+          <option value="2000" selected>2 km</option>
+          <option value="5000">5 km</option>
+        </select>
+
+        <button id="btnProximos" type="button">Buscar próximos</button>
+
+        <button id="btnLimparBusca" type="button">Voltar ao mapa</button>
+      </section>
+
+      <section id="form">
+        <h2>Cadastrar ou editar ocorrência</h2>
+
+        <label for="campoNome"> Nome da ocorrência </label>
+
+        <input
+          type="text"
+          id="campoNome"
+          placeholder="Ex.: Buraco na avenida"
+          maxlength="255"
+          required
+        />
+
+        <label for="campoDescricao"> Descrição </label>
+
+        <textarea
+          id="campoDescricao"
+          placeholder="Descreva o problema encontrado"
+          rows="3"
+        ></textarea>
+
+        <label for="campoTipo"> Categoria </label>
+
+        <select id="campoTipo" required>
+          <option value="Buraco na via">Buraco na via</option>
+          <option value="Iluminação pública">Iluminação pública</option>
+          <option value="Acúmulo de lixo">Acúmulo de lixo</option>
+          <option value="Alagamento">Alagamento</option>
+          <option value="Esgoto a céu aberto">Esgoto a céu aberto</option>
+          <option value="Outros">Outros</option>
+        </select>
+
+        <label for="campoStatus"> Status </label>
+
+        <select id="campoStatus">
+          <option value="Pendente">Pendente</option>
+          <option value="Em andamento">Em andamento</option>
+          <option value="Resolvido">Resolvido</option>
+        </select>
+
+        <button id="btnSalvar" type="button">Salvar ocorrência</button>
+      </section>
+    </main>
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GeoAlerta — Problemas urbanos</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h1>GeoAlerta</h1>
-    <p>Registre e visualize problemas urbanos no mapa.</p>
-    <div id="map"></div>
-    <div id="buscar">
-      <input
-        type="text"
-        id="buscar-inp"
-        placeholder="insira o local a ser buscado"
-      /><button id="btnBuscar">Buscar</button>
-    </div>
-    <div id="form">
-      <input type="text" id="campoNome" placeholder="Informe o nome" />
-      <input
-        type="text"
-        id="campoDescricao"
-        placeholder="Informe a descrição"
-      />
-      <select id="campoTipo" aria-label="Categoria da ocorrência">
-        <option value="Buraco na via">Buraco na via</option>
-        <option value="Iluminação pública">Iluminação pública</option>
-        <option value="Acúmulo de lixo">Acúmulo de lixo</option>
-        <option value="Alagamento">Alagamento</option>
-        <option value="Esgoto a céu aberto">Esgoto a céu aberto</option>
-        <option value="Outros">Outros</option>
-      </select>
-      <label for="campoStatus">Status</label>
-
-      <select id="campoStatus">
-        <option value="Pendente">Pendente</option>
-        <option value="Em andamento">Em andamento</option>
-        <option value="Resolvido">Resolvido</option>
-      </select>
-      <button id="btnSalvar">Salvar</button>
-    </div>
 
     <script src="script.js"></script>
   </body>

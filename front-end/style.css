@@ -1,44 +1,232 @@
 body {
-    background-color: rgb(209, 209, 209);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  background-color: rgb(209, 209, 209);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  color: rgb(45, 42, 48);
 }
-#map { 
-    height: 600px; 
-    width: 50%;
-    border-radius: 15px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.349);
-    margin-top: 100px;
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
 }
-#buscar{
-    margin: 20px;
+
+header h1 {
+  margin-bottom: 5px;
 }
-input{
-    border-radius: 7px;
-    border: none;
-    margin-right: 7px;
-    width: 300px;
-    height: 30px;
-    padding-left: 5px;
-    transition: 0.3s ease;
+
+header p {
+  color: rgb(85, 80, 90);
 }
-button{
-    border-radius: 5px;
-    border: none;
-    transition: 0.3s ease;
-    height: 30px;
-    color: white;
-    background-color: rgb(79, 71, 87);
-    margin-left: 5px;
+
+main {
+  width: 100%;
+  max-width: 950px;
 }
-button:hover{
-    transform: scale(1.1);
+
+section {
+  margin-bottom: 25px;
 }
-input:hover{
-    transform: scale(1.05);
+
+section h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
 }
-select:hover{
-    transform: scale(1.05);
+
+#map {
+  height: 500px;
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.349);
+  margin-top: 15px;
+  z-index: 1;
+}
+
+section p {
+  font-size: 14px;
+}
+
+#buscar {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: rgb(235, 235, 235);
+  border-radius: 10px;
+}
+
+input {
+  border-radius: 7px;
+  border: none;
+  margin-right: 7px;
+  width: 300px;
+  height: 30px;
+  padding-left: 5px;
+  transition: 0.3s ease;
+}
+
+select,
+textarea {
+  border-radius: 7px;
+  border: none;
+  padding: 8px;
+  transition: 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+select {
+  min-height: 35px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  border-radius: 5px;
+  border: none;
+  transition: 0.3s ease;
+  min-height: 30px;
+  padding: 7px 12px;
+  color: white;
+  background-color: rgb(79, 71, 87);
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background-color: rgb(98, 85, 112);
+}
+
+input:hover {
+  transform: scale(1.03);
+}
+
+select:hover {
+  transform: scale(1.03);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgb(119, 102, 137);
+}
+
+.busca-proximidade {
+  background-color: rgb(235, 235, 235);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+.busca-proximidade label {
+  margin-right: 10px;
+}
+
+.busca-proximidade button {
+  margin-top: 10px;
+}
+
+#form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: rgb(235, 235, 235);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+#form label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#form input,
+#form select,
+#form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 0;
+}
+
+#form input {
+  height: 38px;
+}
+
+#form button {
+  margin-left: 0;
+  margin-top: 10px;
+  height: 40px;
+}
+
+.leaflet-popup-content button {
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.leaflet-popup-content p {
+  margin: 7px 0;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  #map {
+    height: 400px;
+  }
+
+  #buscar input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+
+  #buscar button {
+    margin-left: 0;
+  }
+
+  .busca-proximidade select {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .busca-proximidade button {
+    margin-left: 0;
+    margin-right: 5px;
+  }
+}
+
+
+/* Ícones das ocorrências */
+.icone-ocorrencia {
+  background: transparent;
+  border: none;
+}
+
+.marcador-ocorrencia {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid white;
+  box-sizing: border-box;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.marcador-ocorrencia span {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.marcador-ocorrencia:hover {
+  transform: scale(1.15);
 }
