@@ -1,12 +1,50 @@
 import Poi from "../model/Poi.js";
+import { Op, fn, col, where } from "sequelize";
 
 export async function getPois(req, res) {
   try {
-    const pois = await Poi.findAll();
+    const { north, south, east, west } = req.query;
+
+    const limites = [north, south, east, west].map(Number);
+
+    if (
+      [north, south, east, west].some(
+        (valor) => valor === undefined || valor === "",
+      ) ||
+      limites.some((valor) => !Number.isFinite(valor))
+    ) {
+      return res.status(400).json({
+        erro: "Informe north, south, east e west válidos",
+      });
+    }
+
+    const [norte, sul, leste, oeste] = limites;
+
+    if (
+      sul < -90 ||
+      norte > 90 ||
+      sul > norte ||
+      oeste < -180 ||
+      leste > 180 ||
+      oeste > leste
+    ) {
+      return res.status(400).json({
+        erro: "Limites geográficos inválidos",
+      });
+    }
+
+    const areaVisivel = fn("ST_MakeEnvelope", oeste, sul, leste, norte, 4326);
+
+    const pois = await Poi.findAll({
+      where: where(fn("ST_Intersects", col("localizacao"), areaVisivel), true),
+    });
+
     res.json(pois);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ erro: "Erro ao buscar ocorrências" });
+    res.status(500).json({
+      erro: "Erro ao consultar ocorrências",
+    });
   }
 }
 

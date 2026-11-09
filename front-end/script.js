@@ -2,6 +2,8 @@ let center = [-6.8863, -38.5559];
 
 var map = L.map("map").setView(center, 13);
 
+const camadaOcorrencias = L.layerGroup().addTo(map);
+
 let marker = L.marker(center, {
   draggable: true,
   opacity: 0.7,
@@ -74,20 +76,37 @@ botaoBuscar.addEventListener("click", async () => {
 // Carregar pontos cadastrados
 carregarPontos();
 
+let consultaAtual = 0;
+
 async function carregarPontos() {
+  const numeroConsulta = ++consultaAtual;
+  const bounds = map.getBounds();
+
+  const parametros = new URLSearchParams({
+    north: bounds.getNorth(),
+    south: bounds.getSouth(),
+    east: bounds.getEast(),
+    west: bounds.getWest(),
+  });
+
   try {
-    const response = await fetch("http://localhost:3000/pois");
+    const response = await fetch(`http://localhost:3000/pois?${parametros}`);
 
     if (!response.ok) {
-      throw new Error("Erro ao carregar ocorrências");
+      throw new Error("Erro ao buscar ocorrências");
     }
 
     const pontos = await response.json();
 
+    // Ignora respostas antigas quando o mapa já mudou.
+    if (numeroConsulta !== consultaAtual) return;
+
+    camadaOcorrencias.clearLayers();
+
     pontos.forEach((ponto) => {
       const [longitude, latitude] = ponto.localizacao.coordinates;
 
-      const marcador = L.marker([latitude, longitude]).addTo(map);
+      const marcador = L.marker([latitude, longitude]);
 
       const popup = document.createElement("div");
 
@@ -105,19 +124,25 @@ async function carregarPontos() {
 
       const editar = document.createElement("button");
       editar.textContent = "Editar";
-      editar.addEventListener("click", () => editarOcorrencia(ponto));
+      editar.addEventListener("click", () => {
+        editarOcorrencia(ponto);
+      });
 
       const excluir = document.createElement("button");
       excluir.textContent = "Excluir";
-      excluir.addEventListener("click", () => excluirOcorrencia(ponto.id));
+      excluir.addEventListener("click", () => {
+        excluirOcorrencia(ponto.id);
+      });
 
       popup.append(titulo, descricao, categoria, status, editar, excluir);
 
       marcador.bindPopup(popup);
+      marcador.addTo(camadaOcorrencias);
     });
   } catch (error) {
-    console.error(error);
-    alert("Não foi possível carregar as ocorrências.");
+    if (numeroConsulta === consultaAtual) {
+      console.error("Erro ao carregar ocorrências:", error);
+    }
   }
 }
 
@@ -225,4 +250,12 @@ botaoSalvar.addEventListener("click", async () => {
     console.error(error);
     alert("Não foi possível salvar a ocorrência.");
   }
+});
+
+map.whenReady(() => {
+  carregarPontos();
+});
+
+map.on("moveend", () => {
+  carregarPontos();
 });
