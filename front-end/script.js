@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://geoalerta-6ksc.onrender.com";
 const center = [-6.8863, -38.5559];
 const map = L.map("map").setView(center, 13);
 
